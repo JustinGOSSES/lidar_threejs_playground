@@ -59,7 +59,7 @@
 			void main() {
 				vColor = customColor;
 				vec4 mvPosition = modelViewMatrix * vec4( position, 2.0 );
-				gl_PointSize = size * ( 1100.0 / -mvPosition.z );
+				gl_PointSize = size * ( 2000.0 / -mvPosition.z );
 				//gl_PointSize = size * (100 / -mvPosition.z );
 				gl_Position = projectionMatrix * mvPosition;
 			}
@@ -70,8 +70,8 @@
 			uniform sampler2D texture;
 			varying vec3 vColor;
 			void main() {
-				gl_FragColor = vec4( color * vColor, 50 );
-				// gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+				gl_FragColor = vec4( color * vColor, 1.0 );
+				gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
 			}
 		</script>
 
@@ -107,10 +107,9 @@
 				
 
 				camera = new THREE.PerspectiveCamera( 20, WIDTH / HEIGHT, 1, 1000 );
-				camera.position.z = 60;
+				camera.position.z = 30;
 				camera.position.y = -50;
-				// camera.rotation = 140 * Math.PI / 180
-				// camera.rotation.y = 34
+				camera.rotation = 140 * Math.PI / 180
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
 				controls.addEventListener( 'change', render ); // remove when using animation loop
@@ -171,13 +170,16 @@
 					colors[ i3 + 0 ] = color.r;
 					colors[ i3 + 1 ] = color.g;
 					colors[ i3 + 2 ] = color.b;
-					sizes[ i ] = 0.4;
+					sizes[ i ] = 1;
 				}
 				geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 				geometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
 				geometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
-
-				particleSystem = new THREE.Points( geometry, shaderMaterial );
+				pMaterial = new THREE.ParticleBasicMaterial({
+			      color: 0xFFFFFF,
+			      size: 20
+			    });
+				particleSystem = new THREE.Points( geometry, pMaterial );
 				scene.add( particleSystem );
 				
 				// renderer = new THREE.WebGLRenderer();

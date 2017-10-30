@@ -58,9 +58,8 @@
 			varying vec3 vColor;
 			void main() {
 				vColor = customColor;
-				vec4 mvPosition = modelViewMatrix * vec4( position, 2.0 );
-				gl_PointSize = size * ( 1100.0 / -mvPosition.z );
-				//gl_PointSize = size * (100 / -mvPosition.z );
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_PointSize = size * ( 300.0 / -mvPosition.z );
 				gl_Position = projectionMatrix * mvPosition;
 			}
 		</script>
@@ -70,8 +69,8 @@
 			uniform sampler2D texture;
 			varying vec3 vColor;
 			void main() {
-				gl_FragColor = vec4( color * vColor, 50 );
-				// gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+				gl_FragColor = vec4( color * vColor, 1.0 );
+				gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
 			}
 		</script>
 
@@ -107,10 +106,9 @@
 				
 
 				camera = new THREE.PerspectiveCamera( 20, WIDTH / HEIGHT, 1, 1000 );
-				camera.position.z = 60;
+				camera.position.z = 30;
 				camera.position.y = -50;
-				// camera.rotation = 140 * Math.PI / 180
-				// camera.rotation.y = 34
+				camera.rotation = 140 * Math.PI / 180
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
 				controls.addEventListener( 'change', render ); // remove when using animation loop
@@ -127,8 +125,7 @@
 					fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
 					blending:       THREE.AdditiveBlending,
 					depthTest:      false,
-					transparent:    true,
-					fog: false
+					transparent:    true
 				});
 				var radius = 200;
 				geometry = new THREE.BufferGeometry();
@@ -157,26 +154,22 @@
 					 //color.setHSL( i / particles, 1.0, 0.5 );
 
 					nearest_int = Math.ceil(data[i]["distance_m"])
-					timestamp = Math.ceil(data[i]["vertical_angle"])
-					//time_normal_unq = (2822078825 - timestamp)/66000
-					time_normal_unq = (timestamp/40)
 					if(i<10){console.log("nearest_int = ",nearest_int,"data[i]['distance_m']",data[i]["distance_m"])}
-					if(i<10){console.log("nearest_int = ",time_normal_unq,"data[i]['distance_m']",data[i]["timestamp"])}
+					
 					// colors[ i3 + 0 ] = color[nearest_int]
 					// colors[ i3 + 1 ] = color[nearest_int]
 					// colors[ i3 + 2 ] = color[nearest_int]
 
-					//color.setHSL( 15 / nearest_int, 1, 0.5 );
-					color.setHSL( time_normal_unq, 1, 0.5 );
+					color.setHSL( 15 / nearest_int, 1, 0.5 );
+
 					colors[ i3 + 0 ] = color.r;
 					colors[ i3 + 1 ] = color.g;
 					colors[ i3 + 2 ] = color.b;
-					sizes[ i ] = 0.4;
+					sizes[ i ] = 3;
 				}
 				geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 				geometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
 				geometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
-
 				particleSystem = new THREE.Points( geometry, shaderMaterial );
 				scene.add( particleSystem );
 				
