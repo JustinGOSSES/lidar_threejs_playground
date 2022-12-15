@@ -149,9 +149,9 @@
 					colors[ i3 + 2 ] = color.b;
 					sizes[ i ] = 0.4;
 				}
-				geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-				geometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
-				geometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+				geometry.attributes.position = new THREE.BufferAttribute( positions, 3 );
+				geometry.attributes.customColor = new THREE.BufferAttribute( colors, 3 );
+				geometry.attributes.size = new THREE.BufferAttribute( sizes, 1 );
 				particleSystem = new THREE.Points( geometry, shaderMaterial );
 				scene.add( particleSystem );
 				stats = new Stats();
